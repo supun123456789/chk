@@ -1,15 +1,79 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-  <title>User Data</title>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>User Data - Mobile Version</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      padding: 10px;
+      background-color: #f7f7f7;
+    }
+
+    h1, h2 {
+      text-align: center;
+      color: #333;
+    }
+
+    form {
+      background-color: #fff;
+      padding: 15px;
+      border-radius: 10px;
+      max-width: 400px;
+      margin: 10px auto;
+      box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+    }
+
+    form input, form button {
+      width: 100%;
+      padding: 10px;
+      margin: 5px 0;
+      border-radius: 5px;
+      border: 1px solid #ccc;
+      box-sizing: border-box;
+    }
+
+    form button {
+      background-color: #4CAF50;
+      color: white;
+      border: none;
+      cursor: pointer;
+    }
+
+    form button:hover {
+      background-color: #45a049;
+    }
+
+    #user-list {
+      max-width: 400px;
+      margin: 20px auto;
+      padding: 0;
+      list-style: none;
+    }
+
+    #user-list li {
+      background-color: #fff;
+      padding: 10px;
+      margin: 5px 0;
+      border-radius: 8px;
+      box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+    }
+
+    @media (max-width: 480px) {
+      form, #user-list {
+        width: 90%;
+      }
+    }
+  </style>
 </head>
 <body>
   <h1>Add User</h1>
   <form id="user-form">
-    Name: <input type="text" id="name" required><br>
-    Age: <input type="number" id="age" required><br>
-    Sex: <input type="text" id="sex" required><br>
-    Other: <input type="text" id="other"><br>
+    <input type="text" id="name" placeholder="Name" required>
+    <input type="number" id="age" placeholder="Age" required>
+    <input type="text" id="sex" placeholder="Sex" required>
+    <input type="text" id="other" placeholder="Other">
     <button type="submit">Add User</button>
   </form>
 
@@ -22,12 +86,16 @@
 
     form.addEventListener('submit', function(e) {
       e.preventDefault();
-
-      const data = new FormData(form);
+      const data = {
+        name: document.getElementById('name').value,
+        age: document.getElementById('age').value,
+        sex: document.getElementById('sex').value,
+        other: document.getElementById('other').value
+      };
 
       fetch('add_user.php', {
         method: 'POST',
-        body: data
+        body: new URLSearchParams(data)
       })
       .then(res => res.text())
       .then(msg => {
@@ -50,7 +118,7 @@
         });
     }
 
-    loadUsers(); // initial load
+    loadUsers();
   </script>
 </body>
 </html>
