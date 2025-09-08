@@ -1,24 +1,52 @@
 <!DOCTYPE html>
 <html>
 <head>
-  <title>SQL Data Display</title>
+  <title>User Data Form</title>
 </head>
 <body>
-  <h1>Users</h1>
+  <h1>Add User Data</h1>
+
+  <form id="user-form">
+    Name: <input type="text" id="name" required><br>
+    Age: <input type="number" id="age" required><br>
+    Sex: <input type="text" id="sex" required><br>
+    Other: <input type="text" id="other"><br>
+    <button type="submit">Add User</button>
+  </form>
+
+  <h2>Users List</h2>
   <ul id="user-list"></ul>
 
   <script>
-    // Fetch the JSON file from GitHub
-    fetch('data.json')
-      .then(response => response.json())
-      .then(data => {
-        const list = document.getElementById('user-list');
-        data.forEach(user => {
-          const li = document.createElement('li');
-          li.textContent = `${user.name} (${user.email})`;
-          list.appendChild(li);
-        });
+    // Load existing users from localStorage
+    function loadUsers() {
+      const users = JSON.parse(localStorage.getItem('users') || '[]');
+      const list = document.getElementById('user-list');
+      list.innerHTML = '';
+      users.forEach((user, index) => {
+        const li = document.createElement('li');
+        li.textContent = `${user.name}, Age: ${user.age}, Sex: ${user.sex}, Other: ${user.other}`;
+        list.appendChild(li);
       });
+    }
+
+    // Handle form submission
+    document.getElementById('user-form').addEventListener('submit', function(e) {
+      e.preventDefault();
+      const name = document.getElementById('name').value;
+      const age = document.getElementById('age').value;
+      const sex = document.getElementById('sex').value;
+      const other = document.getElementById('other').value;
+
+      const users = JSON.parse(localStorage.getItem('users') || '[]');
+      users.push({name, age, sex, other});
+      localStorage.setItem('users', JSON.stringify(users));
+
+      loadUsers(); // refresh list
+      this.reset(); // clear form
+    });
+
+    loadUsers(); // initial load
   </script>
 </body>
 </html>
